@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "@discordjs/builders": "^0.5.0",
+    "@discordjs/rest": "^0.1.0-canary.0",
+    "@haileybot/captcha-generator": "^1.7.0",
+    "axios": "^0.22.0",
+    "discord-api-types": "^0.22.0",
+    "discord.js": "^13.1.0",
+    "dotenv": "^10.0.0",
+    "hypixel-api-reborn": "^8.3.0",
+    "mongoose": "^6.0.8"
+  },
+  "name": "bwl",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "dev": "ts-node-dev ./src/index.ts",
+    "deploy": "ts-node-dev ./src/deploy.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

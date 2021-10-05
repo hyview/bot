@@ -12,15 +12,10 @@ Hyview is a platform which aims to display accurate and relevant data about the 
 - View ongoing & past auctions on Skyblock and get notifications when they finish with **Skycheck**
 
 ### Roadmap
-✅ = completed; 
-🔨 = In progress;
-❌ = To be started
 
-| Task             | Done? |
--------------------|--------
-| **/profile** command | ✅    |
-| Captcha system | ✅ |
-| **/guild** command | 🔨    |
-| **/stats** command | ❌    |
-| Party feed |  ❌   |
-| Skycheck | ❌ |
+- [x] **/profile** command
+- [x] Captcha system
+- [ ] **/guild** command
+- [ ] **/stats** command
+- [ ] Party feed
+- [ ] Skycheck

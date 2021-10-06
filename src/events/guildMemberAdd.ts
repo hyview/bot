@@ -6,11 +6,15 @@ import Emojis from "../utils/Emojis";
 
 module.exports = {
 	name: 'guildMemberAdd',
-	once: true,
+	once: false,
 	async exec(m: GuildMember) {
+		
+		(m.client as HyviewClient).logger.userJoin(m.user, m.guild);
 
 		var ca = new Captcha();
 		const chars = ca.value.split("");
+
+		var tries = 0;
 
 		const a = new MessageAttachment(ca.JPEGStream, "captcha.png");
 		
@@ -50,16 +54,19 @@ module.exports = {
 
 			if (i.isButton()) {
 
+				tries++;
+
 				if (codes[parseInt(i.customId.charAt(14))-1] === ca.value) {
 					(i.member?.roles as GuildMemberRoleManager).add("894890539890122802");
 					i.reply({ embeds: [(m.client as HyviewClient).embed({ desc: Emojis.TickSuccess + " All done! Welcome to Hyview :D", type: "SUCCESS" })], ephemeral: true });
 					await msg.delete();
+					(m.client as HyviewClient).logger.userVerify(m.user, tries);
 				} else {
 					i.reply({ ephemeral: true, embeds: [(m.client as HyviewClient).embed({ desc: Emojis.CrossDanger + "That's not the code. Try again."})] });
 				}
 			}
 
-		})
+		});
 
     },
 };

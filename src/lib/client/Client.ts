@@ -1,18 +1,26 @@
-import { Client, Collection, ColorResolvable, EmbedField, MessageEmbed, User } from "discord.js";
+import { Client, Collection, ColorResolvable, EmbedField, Guild, MessageEmbed, TextChannel, User } from "discord.js";
 import { PLAYER_RANK } from "hypixel-api-reborn";
 import Emojis from "../../utils/Emojis";
 import Command from "../structures/Command";
 import * as HyviewModels from "../models/index";
+import chalk from "chalk";
+import * as figlet from "figlet";
+import { Spinner } from "cli-spinner";
+import { config } from "dotenv";
 
 export default class HyviewClient extends Client {
 
     public commands: Collection<string, Command> = new Collection();
+    public console = new HyviewConsoleLogger();
+    public logger = new HyviewChannelLogger(process.env.LOG as `${bigint}`, this)
     
     private _mccolorcodes = new MinecraftColorCodes();
     private _emojis = Emojis;
 
     constructor() {
         super({ intents: 32767 });
+
+        config();
     }
 
     /**
@@ -194,6 +202,71 @@ export default class HyviewClient extends Client {
         seconds = (seconds < 10) ? "0" + seconds : seconds;
         
         return hours + ":" + minutes + " minutes";
+    }
+
+}
+
+class HyviewConsoleLogger {
+
+    public async error(m: string): Promise<void> {
+        console.log(chalk.bold.red("ERROR: ") + chalk.red(m))
+    }
+
+    public async info(m: string): Promise<void> {
+        console.log(chalk.bold.blue("INFO: ") + chalk.blue(m))
+    }
+
+    public async wordmark(): Promise<void> {
+        await figlet.text("Hyview", {
+            font: "Ogre",
+            horizontalLayout: 'default',
+            verticalLayout: 'default',
+            width: 160,
+            whitespaceBreak: true
+        }, (err, data) => {
+            if (err) {
+                console.log('Something went wrong...');
+                console.dir(err);
+                return;
+            }
+            console.log(chalk.bold.magentaBright(data));
+        });
+    }
+
+}
+
+class HyviewChannelLogger {
+
+    public channel;
+    public client;
+
+    constructor(c: `${bigint}`, cl: HyviewClient) {
+        this.channel = c;
+        this.client = cl;
+    }
+
+    public async userJoin(u: User, g: Guild): Promise<void> {
+        (this.client.channels.cache.get(this.channel) as TextChannel).send({ embeds: [this.client.embed({ desc: `${u.tag} joined the server. We're now at ${g.memberCount-3} members.`, type: "SUCCESS" })] })
+    }  
+
+    public async userLeave(u: User, g: Guild): Promise<void> {
+        (this.client.channels.cache.get(this.channel) as TextChannel).send({ embeds: [this.client.embed({ desc: `${u.tag} left the server. We're now at ${g.memberCount-3} members.`, type: "DANGER" })] })
+    }  
+
+    public async userVerify(u: User, t: Number): Promise<void> {
+        (this.client.channels.cache.get(this.channel) as TextChannel).send({ embeds: [this.client.embed({ desc: `${u.tag} successfully verified after ${t} tries.`, type: "INFO" })] })
+    }  
+    
+    public async userNicknameChange(u: User, b: string, a: string): Promise<void> {
+        (this.client.channels.cache.get(this.channel) as TextChannel).send({ embeds: [this.client.embed({ desc: `${u.tag} changed their nickname.\n\n **Before:** ${b}\n**After:** ${a}`, type: "INFO" })] })
+    } 
+
+    public async userRoleAdd(u: User, r: string): Promise<void> {
+        (this.client.channels.cache.get(this.channel) as TextChannel).send({ embeds: [this.client.embed({ desc: `${u.tag} was given **${r}** role.`, type: "SUCCESS" })] })
+    }
+
+    public async userRoleRemove(u: User, r: string): Promise<void> {
+        (this.client.channels.cache.get(this.channel) as TextChannel).send({ embeds: [this.client.embed({ desc: `${u.tag} was removed from **${r}** role.`, type: "DANGER" })] })
     }
 
 }

@@ -70,6 +70,10 @@ class ProfileCommandMessageEmitter {
         return "Unfortunately we cannot fetch data about the user's Discord profile using this method. To view their Discord profile, do /profile and supply a value for \"discord\"";
     }
 
+    PLAYER_DOES_NOT_EXIST(): string {
+        return Emojis.default.CrossDanger + " That player doesn't seem to exist or has never logged into Hypixel."
+    }
+
 }
 
 class BetaProgramMessageEmitter {

@@ -1,8 +1,5 @@
-import { userMention } from "@discordjs/builders";
-import { GuildMember, GuildMemberRoleManager, Message, MessageActionRow, MessageAttachment, MessageButton, TextChannel } from "discord.js";
+import { GuildMember } from "discord.js";
 import HyviewClient from "../lib/client/Client";
-import Captcha from "@haileybot/captcha-generator";
-import Emojis from "../utils/Emojis";
 
 module.exports = {
 	name: 'guildMemberRemove',

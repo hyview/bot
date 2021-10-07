@@ -1,8 +1,8 @@
-import { userMention } from "@discordjs/builders";
-import { GuildMember, GuildMemberRoleManager, Message, MessageActionRow, MessageAttachment, MessageButton, TextChannel } from "discord.js";
+import { GuildMember } from "discord.js";
 import HyviewClient from "../lib/client/Client";
-import Captcha from "@haileybot/captcha-generator";
-import Emojis from "../utils/Emojis";
+import MessageEmitter from "../utils/Messenger";
+import { generateName } from "../utils/NameGenerator";
+import {chars as allchars, inappropriateTerms, reservedTerms } from "../utils/Words";
 
 module.exports = {
 	name: 'guildMemberUpdate',
@@ -10,7 +10,16 @@ module.exports = {
 	async exec(o: GuildMember, n: GuildMember) {
 
         if (o.nickname !== n.nickname) {
-            (n.client as HyviewClient).logger.userNicknameChange(n.user, o.nickname === null ? "No nickname" : o.nickname as string, n.nickname === null ? "No nickname" : n.nickname as string);
+
+            const t = new Date();
+            t.setSeconds(t.getSeconds()-30);
+
+            var pt = (o.joinedAt as Date);
+
+            if (t > pt) {
+                (n.client as HyviewClient).logger.userNicknameChange(n.user, o.nickname === null ? "No nickname" : o.nickname as string, n.nickname === null ? "No nickname" : n.nickname as string);
+            }
+
         } else if (o.roles !== n.roles) {
             o.roles.cache.forEach(r => {
                 if (!n.roles.cache.has(r.id)) {

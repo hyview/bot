@@ -19,7 +19,9 @@ for (const file of commandFiles) {
 	client.commands.set(command.data.name, command);
 }
 
-client.on('ready', () => console.log("Bot online!"));
+client.on('ready', async () => { 
+	await client.console.wordmark()
+});
 
 client.on('interactionCreate', async interaction => {
 	if (!interaction.isCommand()) return;

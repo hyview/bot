@@ -4,16 +4,24 @@
     "@discordjs/rest": "^0.1.0-canary.0",
     "@haileybot/captcha-generator": "^1.7.0",
     "axios": "^0.22.0",
+    "canvas": "^2.8.0",
+    "chalk": "^4.1.2",
+    "cli-spinner": "^0.2.10",
     "discord-api-types": "^0.22.0",
-    "discord.js": "^13.1.0",
+    "discord.js": "^13.2.0",
     "dotenv": "^10.0.0",
+    "figlet": "^1.5.2",
+    "gamer-namer": "^1.0.5",
     "hypixel-api-reborn": "^8.3.0",
     "mongoose": "^6.0.8"
   },
   "name": "bwl",
-  "version": "1.0.0",
+  "version": "0.1.0-pre",
   "main": "index.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/cli-spinner": "^0.2.1",
+    "@types/figlet": "^1.5.4"
+  },
   "scripts": {
     "dev": "ts-node-dev ./src/index.ts",
     "deploy": "ts-node-dev ./src/deploy.ts"

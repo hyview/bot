@@ -36,7 +36,16 @@ module.exports = {
             try {
                 d = await h.getPlayer(i.options.getString("username", true));
                 isLinked = await h.getPlayer(i.options.getString("username", true)).then(player => {
-                    const d = player.socialMedia.filter(i => i.id == "DISCORD");
+
+                    var d: any[] = [];
+
+                    if (player !== null) {
+                        d = player.socialMedia.filter(i => i.id == "DISCORD");
+                        return d;
+                    } else {
+                        d = []
+                    }
+
                     return d;
                 })
             } catch (e: any) {
@@ -74,10 +83,12 @@ module.exports = {
                             i.followUp({ embeds: [c.embed({ desc: "An unexpected error has occured. Please report it to the development team, and tell them the following:\n`The \"commands/link.ts\" file returned null when fetching a Hypixel player in line 35. Please correct this.`"})]})
                             return;
                         } else {
-                            r.set("uuid", d.uuid);
-                            await r?.save().then(() => {
-                                i.followUp({ embeds: [c.embed({ desc: Emojis.default.TickSuccess + " Successfully linked \"" + i.options.getString("username") + "\" to your Discord account.", type: "SUCCESS" })]})
-                            })
+                            if (d) {
+                                r.set("uuid", d.uuid);
+                                await r?.save().then(() => {
+                                    i.followUp({ embeds: [c.embed({ desc: Emojis.default.TickSuccess + " Successfully linked \"" + i.options.getString("username") + "\" to your Discord account.", type: "SUCCESS" })]})
+                                })
+                            }
                         }
                     }
                 }

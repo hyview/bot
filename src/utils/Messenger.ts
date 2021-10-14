@@ -5,6 +5,7 @@ export default class MessageEmitter {
     public link = new LinkCommandMessageEmitter();
     public profile = new ProfileCommandMessageEmitter();
     public beta = new BetaProgramMessageEmitter();
+    public events = new EventMessageEmitter();
 
     GENERIC_ERROR(e: any): string {
         return "An unexpected error has occured. Please report it to the development team, and show them this stack trace: \n`" + e.stack + "`";
@@ -70,6 +71,10 @@ class ProfileCommandMessageEmitter {
         return "Unfortunately we cannot fetch data about the user's Discord profile using this method. To view their Discord profile, do /profile and supply a value for \"discord\"";
     }
 
+    PLAYER_DOES_NOT_EXIST(): string {
+        return Emojis.default.CrossDanger + " That player doesn't seem to exist or has never logged into Hypixel."
+    }
+
 }
 
 class BetaProgramMessageEmitter {
@@ -92,5 +97,22 @@ class BetaProgramMessageEmitter {
 
     USER_REF_MSG(): string {
         return "Hello! I'm Hyview and I've been asked to contact you about our Closed Beta program beginning (if all goes well) on November 13th 2021. \n\nThank you for submitting your application. Unfortunately, your application has not been successful, and, as a result, you have not been invited to join our Closed Beta program. We thank you for your interest in the Project, and please do feel free to re-apply for our next beta phase when it happens."
+    }
+}
+
+class EventMessageEmitter {
+    public guildMemberAdd = new GuildMemberAddMessageEmitter();
+    public guildMemberUpdate = new GuildMemberUpdateMessageEmitter();
+}
+
+class GuildMemberAddMessageEmitter {
+    NICKNAME_INAPPROPRIATE(nn: string, str: number): string {
+        return "Our tech elves have found " + str.toString() + " instance(s) of hard to read, inappropriate or confusing content in your Discord username so we've changed it to \"**" + nn + "**\". You can change it at any time."
+    }
+}
+
+class GuildMemberUpdateMessageEmitter {
+    NICKNAME_INAPPROPRIATE(nn: string, str: number): string {
+        return "Our tech elves have found " + str.toString() + " instance(s) of hard to read, inappropriate or confusing content in your nickname so we've changed it to \"**" + nn + "**\". You can change it at any time."
     }
 }

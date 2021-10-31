@@ -102,6 +102,7 @@ export default class HyviewClient extends Client {
                 c = this._mccolorcodes.RED as ColorResolvable;
                 break;
             case "Game Master":
+            case undefined:
                 c = this._mccolorcodes.DARK_GREEN as ColorResolvable;
                 break;
             default:

@@ -1,10 +1,13 @@
 # Hyview
+
 **The new way to manage your Hypixel profile.**
 
 ### What is Hyview?
+
 Hyview is a platform which aims to display accurate and relevant data about the Hypixel network and its players, and to enhance their experience.
 
 ### Features
+
 - View player statistics with **/profile**
 - View guild information with **/guild**
 - Check statistics for individual gamemodes with **/stats**

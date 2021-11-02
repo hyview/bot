@@ -8,6 +8,4 @@ const generateName = () => {
   return adjective + gamingTerm;
 };
 
-export {
-    generateName
-}
+export { generateName };

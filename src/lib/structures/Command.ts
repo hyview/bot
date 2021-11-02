@@ -4,6 +4,6 @@ import { Client } from "hypixel-api-reborn";
 import HyviewClient from "../client/Client";
 
 export default interface Command {
-    data: SlashCommandBuilder,
-    exec: (i: CommandInteraction, c: HyviewClient, h: Client) => void
+  data: SlashCommandBuilder;
+  exec: (i: CommandInteraction, c: HyviewClient, h: Client) => void;
 }

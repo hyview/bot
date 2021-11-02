@@ -24,7 +24,8 @@
   },
   "scripts": {
     "dev": "ts-node-dev ./src/index.ts",
-    "deploy": "ts-node-dev ./src/deploy.ts"
+    "deploy": "ts-node-dev ./src/deploy.ts",
+    "lint": "prettier --write ."
   },
   "keywords": [],
   "author": "",

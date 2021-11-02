@@ -123,7 +123,7 @@ export default class HyviewClient extends Client {
         c = this._mccolorcodes.LIGHT_GREY as ColorResolvable;
         break;
     }
-
+    
     return c;
   }
 

@@ -8,14 +8,15 @@ import {
   TextChannel,
   User,
 } from "discord.js";
-import { PLAYER_RANK } from "hypixel-api-reborn";
 import Emojis from "../../utils/Emojis";
 import Command from "../structures/Command";
 import * as HyviewModels from "../models/index";
 import chalk from "chalk";
 import * as figlet from "figlet";
-import { Spinner } from "cli-spinner";
+import mongoose from "mongoose";
+const fs = require("fs");
 import { config } from "dotenv";
+import * as Hypixel from "hypixel-api-reborn";
 
 export default class HyviewClient extends Client {
   public commands: Collection<string, Command> = new Collection();
@@ -24,6 +25,7 @@ export default class HyviewClient extends Client {
 
   private _mccolorcodes = new MinecraftColorCodes();
   private _emojis = Emojis;
+  private _hypixel = new Hypixel.Client(process.env.HYPIXEL_KEY as string);
 
   constructor() {
     super({ intents: 32767 });
@@ -90,6 +92,7 @@ export default class HyviewClient extends Client {
    * Converts a Hypixel rank returned by hypixel-api-reborn to a relevant ColorResolvable
    * @param t A string returned by hypixel-api-reborn
    * @returns The relevant colour
+   * @deprecated use {@link fetchRankProps} instead
    */
   public validateRankColour(t: string): ColorResolvable {
     var c: ColorResolvable;
@@ -118,6 +121,9 @@ export default class HyviewClient extends Client {
         break;
       case "Game Master":
         c = this._mccolorcodes.DARK_GREEN as ColorResolvable;
+        break;
+      case "PIG+++":
+        c = this._mccolorcodes.PINK as ColorResolvable;
         break;
       default:
         c = this._mccolorcodes.LIGHT_GREY as ColorResolvable;
@@ -203,8 +209,8 @@ export default class HyviewClient extends Client {
       case "PIG+++":
         d = {
           rank: "PIG+++",
-          rankColor: this._mccolorcodes.PURPLE as ColorResolvable,
-          emoji: "",
+          rankColor: this._mccolorcodes.PINK as ColorResolvable,
+          emoji: this._emojis.HypixelStaff,
         };
         break;
       case "Game Master":
@@ -256,6 +262,70 @@ export default class HyviewClient extends Client {
 
     return hours + ":" + minutes + " minutes";
   }
+
+  public async start() {
+    console.clear();
+    config();
+
+    await mongoose.connect("mongodb://localhost:27017/hyview").then(() => {      
+      this.console.info("Connected to database successfully.");
+      this.console.loading("Beginning the command registry process...");
+    }).then(() => {
+      const commandFiles = fs
+      .readdirSync("./src/commands")
+      .filter((file: string) => file.endsWith(".ts"));
+
+      for (const file of commandFiles) {
+        const command = require(`../../commands/${file}`);
+        this.commands.set(command.data.name, command);
+        this.console.info("Registered command \"" + command.data.name + "\"");
+      }   
+    }).then(() => {      
+      this.console.info("Command registry process complete.");
+    }).then(() => {      
+      this.console.loading("Beginning the event registry process...");
+    }).then(() => {
+      const eventFiles = fs
+      .readdirSync("./src/events")
+      .filter((file: string) => file.endsWith(".ts"));
+
+      for (const file of eventFiles) {
+        const event = require(`../../events/${file}`);
+        if (event.once) {
+          this.once(event.name, (...args) => event.exec(...args));
+        } else {
+          this.on(event.name, (...args) => event.exec(...args));
+        }
+        this.console.info("Registered event \"" + event.name + "\"");
+      }
+    }).then(()=> {      
+      this.console.info("Event registry process complete.");
+      this.console.loading("Establishing connection to Discord gateway...");
+    }).then(() => {      
+      this.login(process.env.TOKEN);
+    }).then(() => {      
+      this.console.success("Connection established! Bot is online. Setting up cosmetic features...");
+    });
+
+    this.on("interactionCreate", async (interaction) => {
+      if (!interaction.isCommand()) return;
+
+      const command = this.commands.get(interaction.commandName);
+
+      if (!command) return;
+
+      try {
+        await command.exec(interaction, this, this._hypixel);
+      } catch (error) {
+        console.error(error);
+        await interaction.reply({
+          content: "There was an error while executing this command!",
+          ephemeral: true,
+        });
+      }
+    });
+
+  }
 }
 
 class HyviewConsoleLogger {
@@ -267,25 +337,12 @@ class HyviewConsoleLogger {
     console.log(chalk.bold.blue("INFO: ") + chalk.blue(m));
   }
 
-  public async wordmark(): Promise<void> {
-    await figlet.text(
-      "Hyview",
-      {
-        font: "Ogre",
-        horizontalLayout: "default",
-        verticalLayout: "default",
-        width: 160,
-        whitespaceBreak: true,
-      },
-      (err, data) => {
-        if (err) {
-          console.log("Something went wrong...");
-          console.dir(err);
-          return;
-        }
-        console.log(chalk.bold.magentaBright(data));
-      }
-    );
+  public async loading(m: string): Promise<void> {
+    console.log(chalk.bold.yellow("LOADING: ") + chalk.yellow(m));
+  }
+
+  public async success(m: string): Promise<void> {
+    console.log(chalk.bold.green("SUCCESS: ") + chalk.green(m));
   }
 }
 
@@ -402,7 +459,6 @@ class MinecraftColorCodes {
   public DARK_AQUA = "#00aaaa";
   public BLUE = "#5555ff";
   public DARK_BLUE = "#0000aa";
-  public PURPLE = "#ff55ff";
   public PINK = "#ff55ff";
   public DARK_PURPLE = "#aa00aa";
   public WHITE = "#ffffff";

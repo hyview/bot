@@ -102,13 +102,15 @@ module.exports = {
                 },
               ],
               img: "https://crafatar.com/renders/head/" + uuid,
-              color: hs ? "#de5667" : c.validateRankColour(p.rank),
+              color: hs ? "#de5667" : c.fetchRankProps(p.rank)?.rankColor,
             });
 
             i.replied
               ? i.editReply({ embeds: [em] })
               : i.reply({ embeds: [em] });
           }
+        } else {
+          i.reply({ embeds: [c.embed({ desc: new MessageEmitter().profile.PLAYER_NOT_IN_DB(), type: "DANGER" })] })
         }
       } else {
         const p = await h
@@ -156,7 +158,7 @@ module.exports = {
             footer:
               new MessageEmitter().profile.WARNING_CANNOT_FETCH_DISCORD_DATA(),
             img: "https://crafatar.com/renders/head/" + p.uuid,
-            color: c.validateRankColour(p.rank),
+            color: c.fetchRankProps(p.rank)?.rankColor,
           });
 
           i.replied ? i.editReply({ embeds: [em] }) : i.reply({ embeds: [em] });

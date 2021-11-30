@@ -27,6 +27,13 @@ export default class MessageEmitter {
       " You need to be a Hyview senior staff member to use this command!"
     );
   }
+
+  FEATURE_NOT_YET_ENABLED(): string {
+    return (
+      Emojis.default.ShieldInfo +
+      "Steady on! We're still working on this feature."
+    )
+  }
 }
 
 class LinkCommandMessageEmitter {
@@ -110,6 +117,14 @@ class ProfileCommandMessageEmitter {
     return (
       Emojis.default.CrossDanger +
       " That player doesn't seem to exist or has never logged into Hypixel."
+    );
+  }
+
+  
+  PLAYER_NOT_IN_DB(): string {
+    return (
+      Emojis.default.CrossDanger +
+      " That player seems to not have linked their account with our servers so we can't show Discord data about them. Try inputting their Minecraft username instead."
     );
   }
 }

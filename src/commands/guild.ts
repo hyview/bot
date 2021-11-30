@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { CommandInteraction } from "discord.js";
-import { Client } from "hypixel-api-reborn";
+import { Client as HypixelClient } from "hypixel-api-reborn";
 import * as HyviewModels from "../lib/models";
 import MessageEmitter from "../utils/Messenger";
 import HyviewClient from "../lib/client/Client";
@@ -18,7 +18,7 @@ module.exports = {
         );
     }),
     
-  exec: (i: CommandInteraction, c: HyviewClient, h: Client) => {
+  exec: (i: CommandInteraction, c: HyviewClient, h: HypixelClient) => {
     i.reply({ embeds: [c.embed({ desc: new MessageEmitter().FEATURE_NOT_YET_ENABLED(), type: "INFO" })]});
   },
 }

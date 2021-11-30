@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { CommandInteraction } from "discord.js";
-import { Client } from "hypixel-api-reborn";
+import { Client as HypixelClient } from "hypixel-api-reborn";
 import HyviewClient from "../client/Client";
 
 export default interface Command {

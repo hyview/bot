@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { CommandInteraction, Formatters, Message, User } from "discord.js";
-import { Client } from "hypixel-api-reborn";
+import { Client as HypixelClient } from "hypixel-api-reborn";
 import * as HyviewModels from "../lib/models";
 import MessageEmitter from "../utils/Messenger";
 import HyviewClient from "../lib/client/Client";
@@ -22,7 +22,7 @@ module.exports = {
           "The Minecraft username of the player (not recommended)"
         );
     }),
-  exec: async (i: CommandInteraction, c: HyviewClient, h: Client) => {
+  exec: async (i: CommandInteraction, c: HyviewClient, h: HypixelClient) => {
     if (i.options.getString("minecraft") !== null) {
       i.reply({
         embeds: [

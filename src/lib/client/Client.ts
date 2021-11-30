@@ -26,6 +26,18 @@ export default class HyviewClient extends Client {
   private _mccolorcodes = new MinecraftColorCodes();
   private _emojis = Emojis;
   private _hypixel = new Hypixel.Client(process.env.HYPIXEL_KEY as string);
+  
+  public get hypixel() {
+    return this._hypixel;
+  }
+  
+  public get customEmojis() {
+    return this._emojis;
+  }
+  
+  public get mccolorcodes() {
+    return this._mccolorcodes;
+  }
 
   constructor() {
     super({ intents: 32767 });

@@ -2,7 +2,6 @@ import { userMention } from "@discordjs/builders";
 import {
   GuildMember,
   GuildMemberRoleManager,
-  Message,
   MessageActionRow,
   MessageAttachment,
   MessageButton,

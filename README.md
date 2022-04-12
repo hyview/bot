@@ -1,6 +1,8 @@
-# Hyview
+# Hyview - NOW DISUSED
 
 **The new way to manage your Hypixel profile.**
+
+## The team is no longer developing this. We're leaving this here for reference
 
 ### What is Hyview?
 
@@ -14,11 +16,4 @@ Hyview is a platform which aims to display accurate and relevant data about the 
 - Join public parties in our **Party Feed**
 - View ongoing & past auctions on Skyblock and get notifications when they finish with **Skycheck**
 
-### Roadmap
 
-- [x] **/profile** command
-- [x] Captcha system
-- [ ] **/guild** command
-- [ ] **/stats** command
-- [ ] Party feed
-- [ ] Skycheck
